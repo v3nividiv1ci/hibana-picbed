@@ -8,13 +8,32 @@ def generate_token(username, password):
     exp = int(time.time()) + 86400 * 114
     # JSON数据
     # 生成token
-    payload = {"exp": exp, "username": username, "password": password, "admin": True}
-    token = jwt.encode(payload, config.key)
+    headers = {
+        "alg": "HS256",
+        "typ": "JWT"
+    }
+    payload = {"exp": exp, "username": username, "admin": True}
+    token = jwt.encode(payload=payload, key=config.key, headers=headers, algorithm='HS256')
     return token
 
 
-def authentication(token):
-    exp, username, password = jwt.decode(token, config.key, algorithms=['HS256'])['exp', 'username', 'password']
-    pass
-#     验证token是否合法：从数据库里面调取
-#     验证token是否过期
+def validate_token(token):
+    # jwt校验，通过则返回解码信息
+    # jwt比token方便的地方：不需要/少查询数据库
+    payload = None
+    msg = None
+    # jwt有效、合法性校验
+    try:
+        # True：进行校验
+        payload = jwt.decode(token, config.key, True, algorithm='HS256')
+    except jwt.ExpiredSignatureError:
+        msg = "token expired"
+    except jwt.DecodeError:
+        msg = "token authentication failed"
+    except jwt.InvalidTokenError:
+        msg = "invalid token"
+    return payload, msg
+
+
+
+
