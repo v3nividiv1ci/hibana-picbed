@@ -2,7 +2,6 @@ import pymysql
 from dbutils.pooled_db import PooledDB
 import config
 
-# 这段我抄的=。=
 POOL = PooledDB(
         creator=pymysql,  # 使用链接数据库的模块
         maxconnections=15,  # 连接池允许的最大连接数，0和None表示不限制连接数
