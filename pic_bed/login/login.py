@@ -25,12 +25,12 @@ def login(username, password):
     if not cursor.execute(sql, username):
         conn.commit()
         pool.close_conn(conn, cursor)
-        return 0
+        return 10001
     password_db = cursor.fetchone()[2]
     conn.commit()
     pool.close_conn(conn, cursor)
     # 输入密码错误
     if password_db != password:
-        return 1
+        return 10002
     # 成功登陆
-    return 2
+    return 0

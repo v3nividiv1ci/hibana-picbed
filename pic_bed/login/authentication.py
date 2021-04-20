@@ -5,7 +5,7 @@ import time
 
 def generate_token(username):
     # 失效时间
-    exp = int(time.time()) + 3
+    exp = int(time.time()) + 3600 * 11.45
     # JSON数据
     # 生成token
     headers = {
@@ -20,7 +20,6 @@ def generate_token(username):
 def validate_token(token):
     # jwt校验，通过则返回解码信息
     # jwt比token方便的地方：不需要/少查询数据库
-    time.sleep(3)
     payload = None
     msg = None
     # jwt有效、合法性校验
