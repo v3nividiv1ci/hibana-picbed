@@ -49,7 +49,7 @@ def create_app(test_config=None):
                 return dict(success=False, code="500", msg=msg)
             username = payload["username"]
             img = request.files.get("img")
-            img_name = pic_load.pic_save(username, img, root) + ".jpg"
+            img_name = pic_load.save_pic(username, img, root) + ".jpg"
             if img_name:
                 return dict(success=True, code="200", pname=img_name)
 
@@ -66,7 +66,7 @@ def create_app(test_config=None):
             img_name : 11451141919810.jpg
             '''
             img_name = request.args.get("img_name")
-            img_stream = pic_load.pic_get(username, img_name, root)
+            img_stream = pic_load.rd_pic(username, img_name, root, True)
             if img_stream == 10003:
                 return dict(success=False, code="500", msg="pic not found")
             elif img_stream == 10004:
@@ -78,16 +78,26 @@ def create_app(test_config=None):
                     as_attachment=True,
                     attachment_filename='%s' % img_name)
 
-    @app.route("/delete", methods=["POST"])
+    @app.route("/delete", methods=["DELETE"])
     def pic_delete():
-        if request.method == "POST":
+        if request.method == "DELETE":
             token = request.json.get("token")
             payload, msg = authentication.validate_token(token)
             # 对token进行合法性校验
             if msg:
                 return dict(success=False, code="500", msg=msg)
             username = payload["username"]
-            pass
+            '''
+            img_name : 11451141919810.jpg
+            '''
+            img_name = request.args.get("img_name")
+            img_stream = pic_load.rd_pic(username, img_name, root, False)
+            if img_stream == 10003:
+                return dict(success=False, code="500", msg="pic not found")
+            elif img_stream == 10004:
+                return dict(success=False, code="500", msg="username unmatch")
+            else:
+                return dict(success=True, code="200", msg="pic deleted")
 
     return app
 
