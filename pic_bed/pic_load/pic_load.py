@@ -63,7 +63,7 @@ def rd_pic(username, img_name, root, r):
     else:
 
         t1 = Thread(target=delete_file, args=(str(img_name), root))
-        t2 = Thread(target=delete_path, args=(str(img_name)))
+        t2 = Thread(target=delete_path, args=(str(img_name),))
         t1.start()
         t2.start()
         t1.join()
