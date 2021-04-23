@@ -30,6 +30,18 @@ def recreate_pic_route():
     pool.close_conn(conn, cursor)
 
 
+def recreate_client_token():
+    conn, cursor = pool.create_conn()
+    # cursor.execute("DROP TABLE IF EXISTS PIC_ROUTE")
+    sql = """CREATE TABLE IF NOT EXISTS `CLIENT_TOKEN`(
+        `ID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        `USERNAME` VARCHAR(200) NOT NULL,
+        `TOKEN` VARCHAR(200) NOT NULL,
+        PRIMARY KEY ( `ID` )
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8;"""
+    cursor.execute(sql)
+    conn.commit()
+    pool.close_conn(conn, cursor)
 
 
 
