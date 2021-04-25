@@ -4,7 +4,9 @@ import random
 
 # 生成并保存authz_code
 def generate_save_code(pool, uri):
+    print("uri = ", uri)
     code = random.randint(1, 1000)
+    print("code = ", code)
     r = redis.Redis(connection_pool=pool)
     r.set(uri, code, ex=600)
     return code

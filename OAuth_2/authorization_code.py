@@ -32,9 +32,3 @@ def generate_client_token(username, scope, exp):
     return token
 
 
-def insert_token(username, token):
-    conn, cursor = pool.create_conn()
-    sql = "insert into client_token values (NULL, %s, %s)"
-    cursor.execute(sql, username, token)
-    conn.commit()
-    pool.close_conn(conn, cursor)
